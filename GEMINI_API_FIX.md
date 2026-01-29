@@ -14,7 +14,9 @@ Quota exceeded for:
 - generativelanguage.googleapis.com/generate_content_free_tier_input_token_count
 ```
 
-**Current API Key:** `AIzaSyBqx-QEeqAwq8b5T7PplxO2lUnhaPn9Gsw`
+**Current API Key:** `REDACTED_GEMINI_API_KEY`
+
+> **Security note:** The actual key was removed from this file to avoid accidental public exposure. Keep keys only in `backend/.env` or your secret manager and rotate the key if it was previously pushed to a public repo.
 
 ---
 
