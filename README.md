@@ -1,8 +1,8 @@
-# FullStack Todo Web Application
+# Todo FullStack Web Application (Phase III: AI Chatbot)
 
-A comprehensive full-stack todo application featuring a Next.js frontend with TypeScript and Tailwind CSS, and a FastAPI backend with PostgreSQL database and JWT authentication. Built using spec-driven development methodology.
+A monorepo with a Next.js frontend, FastAPI backend, and Phase III AI Chatbot integration (Google Gemini, optional Claude/OpenAI fallbacks). Spec‑Driven Development, pnpm/turbo tooling.
 
-## 🚀 Features
+## 🚀 Highlights
 
 ### Frontend (Next.js)
 - **Modern UI**: Clean, responsive interface built with Next.js 14 and TypeScript
@@ -24,17 +24,18 @@ A comprehensive full-stack todo application featuring a Next.js frontend with Ty
 - **Data Persistence**: Reliable database storage with backup capabilities
 - **Type Safety**: Full TypeScript support across frontend and backend
 
-## 🛠️ Tech Stack
+## 🧰 Tech Stack & Key Versions
 
-| Layer | Technology | Purpose |
-|-------|------------|---------|
-| **Frontend** | Next.js 14, React, TypeScript | User Interface & Client-side Logic |
-| **Styling** | Tailwind CSS | Responsive Styling & UI Components |
-| **Backend** | FastAPI, Python 3.13+ | API Server & Business Logic |
-| **Database** | PostgreSQL | Data Storage & Management |
-| **ORM** | SQLAlchemy | Database Abstraction Layer |
-| **Authentication** | JWT, bcrypt | User Authentication & Authorization |
-| **Package Manager** | pnpm | Dependency Management |
+| Layer | Technology | Version (approx) |
+|-------|------------|------------------|
+| Frontend | Next.js, React, TypeScript | next ^14.2.0, react 18.2, typescript 5.9 |
+| Styling | Tailwind CSS | ^3.x |
+| Backend | FastAPI, Uvicorn, SQLModel | fastapi ^0.115, uvicorn ^0.32, sqlmodel ^0.0.31 |
+| AI / Chatbot | Google Gemini (google-genai), fallbacks | google-genai >= 1.0.0 |
+| DB | PostgreSQL (psycopg2) | postgres-compatible |
+| Monorepo | pnpm, turbo | pnpm@9+, turbo ^2.x |
+
+> Note: Specific pinned versions are in `package.json` and `backend/pyproject.toml`.
 
 ## 📋 Prerequisites
 
@@ -44,61 +45,58 @@ A comprehensive full-stack todo application featuring a Next.js frontend with Ty
 - pnpm
 - Git
 
-## 🚀 Quick Start
+## Quickstart (Development)
 
-### 1. Clone the Repository
+1. Clone the repo
 
 ```bash
-git clone https://github.com/Muhammad-Umair13/Todo-FullStack-WebApp.git
-cd Todo-FullStack-WebApp
+git clone <your-repo-url>
+cd <repo-folder>
 ```
 
-### 2. Backend Setup
+2. Install root tooling (optional)
 
 ```bash
-# Navigate to backend directory
+pnpm install
+```
+
+3. Backend (FastAPI)
+
+```bash
 cd backend
-
-# Install Python dependencies
-pip install -e ".[dev]"
-# Or using uv (recommended)
-uv pip install -e ".[dev]"
-
-# Set up environment variables
+# Install Python deps (poetry or pip)
+# If using pipenv or venv, prefer: pip install -e ".[dev]"
+# Or: poetry install
 cp .env.example .env
-# Edit .env with your database credentials and secret keys
-
-# Initialize the database
+# Edit .env and set DATABASE_URL, JWT_SECRET, and GEMINI_API_KEY (if using Gemini)
 alembic upgrade head
-
-# Run the backend server
 uvicorn src.main:app --reload --port 8000
 ```
 
-### 3. Frontend Setup
+4. Frontend (Next.js)
 
 ```bash
-# Open a new terminal and navigate to frontend directory
 cd frontend
-
-# Install JavaScript dependencies
 pnpm install
-
-# Set up environment variables
 cp .env.example .env.local
-# Edit .env.local with your backend API URL
-
-# Run the frontend development server
+# Edit .env.local to point to backend API (e.g., NEXT_PUBLIC_API_URL=http://localhost:8000)
 pnpm dev
 ```
 
-### 4. Access the Application
+5. Open the app
 
 - Frontend: http://localhost:3000
-- Backend API: http://localhost:8000
-- API Documentation: http://localhost:8000/docs
+- Backend docs: http://localhost:8000/api/docs
 
-## 🏗️ Project Structure
+## AI Chatbot (Phase III)
+
+- Configuration: set `GEMINI_API_KEY` in `backend/.env`. The app expects `GEMINI_MODEL` (default: `gemini-2.0-flash`).
+- Troubleshooting: see `GEMINI_API_FIX.md` for quota and error fixes; `CLAUDE.md` contains Claude guidance.
+- Fallbacks: The codebase contains notes and guides for switching to Claude or OpenAI if needed.
+
+---
+
+## Project Structure (high-level)
 
 ```
 Todo-FullStack-WebApp/
@@ -194,3 +192,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Support
 
 If you encounter any issues or have questions about the application, please open an issue in the GitHub repository.
+
+---
+
+**Updated:** This README was updated to reflect Phase III (AI Chatbot integration). For detailed AI troubleshooting, see `GEMINI_API_FIX.md` and `CLAUDE.md`.
