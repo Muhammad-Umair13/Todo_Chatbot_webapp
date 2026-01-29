@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Bash(git checkout:*)",
+      "Bash(python:*)",
+      "Bash(del \"C:\\\\Users\\\\Five Star Computer\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python314\\\\Scripts\\\\todo.exe\")",
+      "Bash(echo:*)",
+      "Bash(alembic revision --autogenerate -m \"Initial task table\")",
+      "Bash(dir \"D:\\\\AI Master Engineer\\\\todo_phase_IIs\\\\backend\\\\alembic\\\\versions\")",
+      "Bash(py --version)",
+      "Bash(source .venv/Scripts/activate)",
+      "Bash(pip install -e .)",
+      "Bash(poetry install)",
+      "Bash(pip install mypy)",
+      "Bash(pip install fastapi uvicorn sqlmodel alembic psycopg2-binary pydantic pydantic-settings python-dotenv structlog loguru pytest pytest-asyncio pytest-cov httpx ruff mypy)",
+      "Bash(curl -X POST http://localhost:8000/api/v1/auth/login -H \"Content-Type: application/json\" -d \"{\"\"email\"\":\"\"newuser@example.com\"\",\"\"password\"\":\"\"password123\"\"}\")",
+      "Bash(curl -X GET http://localhost:8000/api/v1/auth/me -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzY4NDQ0MTY3LCJleHAiOjE3Njg0NDc3NjcsImlzcyI6ImJldHRlci1hdXRoIiwiYXVkIjoidG9kby1hcGkiLCJlbWFpbCI6Im5ld3VzZXJAZXhhbXBsZS5jb20iLCJuYW1lIjoiTmV3IFVzZXIifQ.IxGRkE1CEYjf2zpo_fnBVTT-og8oX7pCueafad9DLe0\")",
+      "Bash(curl -X POST http://localhost:8000/api/v1/auth/test-token -H \"Content-Type: application/json\" -d \"{\"\"user_id\"\":\"\"test-user\"\",\"\"email\"\":\"\"test@example.com\"\",\"\"name\"\":\"\"Test User\"\",\"\"expires_in\"\":3600}\")",
+      "Bash(curl -X GET http://localhost:8000/api/v1/auth/me -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXVzZXIiLCJpYXQiOjE3Njg0NDQyODgsImV4cCI6MTc2ODQ0Nzg4OCwiaXNzIjoiYmV0dGVyLWF1dGgiLCJhdWQiOiJ0b2RvLWFwaSIsImVtYWlsIjoidGVzdEBleGFtcGxlLmNvbSIsIm5hbWUiOiJUZXN0IFVzZXIifQ.Dl2ab8CzuX7Kidxg4sfXy7Xwat-yehqPtxPcx_n6GQA\")",
+      "Bash(taskkill /f /im uvicorn.exe)",
+      "Bash(git rev-parse:*)",
+      "Bash(git fetch:*)",
+      "Bash(git init:*)",
+      "Bash(pwsh:*)",
+      "Skill(sp.implement)"
+    ]
+  }
+}

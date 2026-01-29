@@ -1,0 +1,412 @@
+openapi: 3.0.0
+info:
+  title: Todo App Authentication API
+  description: Authentication endpoints for multi-user todo application
+  version: 1.0.0
+  contact:
+    name: Todo App Team
+
+servers:
+  - url: http://localhost:8000/api/v1
+    description: Development server
+  - url: https://api.todo-app.com/api/v1
+    description: Production server
+
+tags:
+  - name: Authentication
+    description: User registration, login, and token management
+
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: Register new user account
+      description: |
+        Create a new user account with email, name, and password.
+        Returns JWT access and refresh tokens upon successful registration.
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+            examples:
+              validRegistration:
+                summary: Valid registration
+                value:
+                  email: user@example.com
+                  name: John Doe
+                  password: SecurePass123
+      responses:
+        '201':
+          description: User successfully registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+              examples:
+                successfulRegistration:
+                  summary: Successful registration
+                  value:
+                    access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                    refresh_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                    token_type: bearer
+                    expires_in: 900
+                    user:
+                      id: 1
+                      email: user@example.com
+                      name: John Doe
+        '400':
+          description: Invalid input or email already registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                emailExists:
+                  summary: Email already registered
+                  value:
+                    error:
+                      code: EMAIL_EXISTS
+                      message: Email already registered
+                      details: {}
+                invalidEmail:
+                  summary: Invalid email format
+                  value:
+                    error:
+                      code: INVALID_INPUT
+                      message: Invalid email format
+                      details:
+                        field: email
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Login with email and password
+      description: |
+        Authenticate user with email and password credentials.
+        Returns JWT access and refresh tokens upon successful login.
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            examples:
+              validLogin:
+                summary: Valid login credentials
+                value:
+                  email: user@example.com
+                  password: SecurePass123
+      responses:
+        '200':
+          description: Successfully authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+              examples:
+                successfulLogin:
+                  summary: Successful login
+                  value:
+                    access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                    refresh_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                    token_type: bearer
+                    expires_in: 900
+                    user:
+                      id: 1
+                      email: user@example.com
+                      name: John Doe
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalidCredentials:
+                  summary: Invalid email or password
+                  value:
+                    error:
+                      code: INVALID_CREDENTIALS
+                      message: Invalid email or password
+                      details: {}
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/refresh:
+    post:
+      tags:
+        - Authentication
+      summary: Refresh access token
+      description: |
+        Exchange a valid refresh token for a new access token.
+        Implements token rotation - returns new refresh token as well.
+      operationId: refreshToken
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshRequest'
+            examples:
+              validRefresh:
+                summary: Valid refresh token
+                value:
+                  refresh_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+      responses:
+        '200':
+          description: Token refreshed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+              examples:
+                successfulRefresh:
+                  summary: Successful token refresh
+                  value:
+                    access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                    refresh_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                    token_type: bearer
+                    expires_in: 900
+                    user:
+                      id: 1
+                      email: user@example.com
+                      name: John Doe
+        '401':
+          description: Invalid or expired refresh token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                expiredToken:
+                  summary: Expired refresh token
+                  value:
+                    error:
+                      code: TOKEN_EXPIRED
+                      message: Refresh token has expired. Please log in again.
+                      details: {}
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/logout:
+    post:
+      tags:
+        - Authentication
+      summary: Logout (invalidate refresh token)
+      description: |
+        Invalidate the user's refresh token to prevent further use.
+        Client should clear stored tokens.
+      operationId: logoutUser
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogoutRequest'
+            examples:
+              validLogout:
+                summary: Valid logout request
+                value:
+                  refresh_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+      responses:
+        '200':
+          description: Successfully logged out
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Successfully logged out
+        '401':
+          description: Unauthorized (invalid access token)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT access token obtained from login or register
+
+  schemas:
+    RegisterRequest:
+      type: object
+      required:
+        - email
+        - name
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          description: User email address (must be unique)
+          example: user@example.com
+          minLength: 3
+          maxLength: 255
+        name:
+          type: string
+          description: User display name
+          example: John Doe
+          minLength: 1
+          maxLength: 255
+        password:
+          type: string
+          format: password
+          description: User password (will be hashed)
+          example: SecurePass123
+          minLength: 8
+          maxLength: 100
+
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          description: User email address
+          example: user@example.com
+        password:
+          type: string
+          format: password
+          description: User password
+          example: SecurePass123
+
+    RefreshRequest:
+      type: object
+      required:
+        - refresh_token
+      properties:
+        refresh_token:
+          type: string
+          description: Valid refresh token
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+    LogoutRequest:
+      type: object
+      required:
+        - refresh_token
+      properties:
+        refresh_token:
+          type: string
+          description: Refresh token to invalidate
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+    AuthResponse:
+      type: object
+      required:
+        - access_token
+        - refresh_token
+        - token_type
+        - expires_in
+        - user
+      properties:
+        access_token:
+          type: string
+          description: JWT access token (expires in 15 minutes)
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        refresh_token:
+          type: string
+          description: JWT refresh token (expires in 7 days)
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        token_type:
+          type: string
+          description: Token type (always "bearer")
+          example: bearer
+        expires_in:
+          type: integer
+          description: Access token expiry time in seconds
+          example: 900
+        user:
+          $ref: '#/components/schemas/UserResponse'
+
+    UserResponse:
+      type: object
+      required:
+        - id
+        - email
+        - name
+      properties:
+        id:
+          type: integer
+          description: Unique user identifier
+          example: 1
+        email:
+          type: string
+          format: email
+          description: User email address
+          example: user@example.com
+        name:
+          type: string
+          description: User display name
+          example: John Doe
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: object
+          required:
+            - code
+            - message
+          properties:
+            code:
+              type: string
+              description: Machine-readable error code
+              example: INVALID_CREDENTIALS
+              enum:
+                - INVALID_INPUT
+                - EMAIL_EXISTS
+                - INVALID_CREDENTIALS
+                - TOKEN_EXPIRED
+                - UNAUTHORIZED
+                - INTERNAL_ERROR
+            message:
+              type: string
+              description: Human-readable error message
+              example: Invalid email or password
+            details:
+              type: object
+              description: Additional error context (only in development)
+              example: {}
+
+security:
+  - BearerAuth: []

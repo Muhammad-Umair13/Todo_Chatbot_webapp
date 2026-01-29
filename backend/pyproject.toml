@@ -1,0 +1,132 @@
+[tool.poetry]
+name = "todo-api"
+version = "1.0.0"
+description = "FastAPI backend for Phase II Todo Web Application"
+authors = ["Hackathon Team"]
+readme = "README.md"
+license = "MIT"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Web Environment",
+    "Framework :: FastAPI",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+packages = [{include = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.13"
+
+# Web framework
+fastapi = "^0.115.0"
+uvicorn = {extras = ["standard"], version = "^0.32.0"}
+
+# Database & ORM
+sqlmodel = "^0.0.31"
+alembic = "^1.14.0"
+psycopg2-binary = "^2.9.10"
+
+# Validation & Serialization
+pydantic = "^2.10.0"
+pydantic-settings = "^2.6.0"
+python-dotenv = "^1.0.0"
+
+# Logging
+structlog = "^24.4.0"
+loguru = "^0.7.2"
+
+# Testing
+pytest = "^8.3.0"
+pytest-asyncio = "^0.24.0"
+pytest-cov = "^6.0.0"
+httpx = "^0.28.0"
+
+# Code quality
+ruff = ">=0.6.0"
+mypy = "^1.13.0"
+
+# Phase III: AI Chatbot - Google Gemini
+google-genai = ">=0.5.0"
+
+[tool.poetry.group.dev.dependencies]
+ipython = "^8.30.0"
+
+[tool.poetry.scripts]
+api = "src.main:app"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # pyflakes
+    "I",      # isort
+    "B",      # flake8-bugbear
+    "C4",     # flake8-comprehensions
+    "UP",     # pyupgrade
+    "SIM",    # flake8-simplify
+]
+ignore = [
+    "B008",   # do not perform function calls in argument defaults
+    "C901",   # too complex
+    "E501",   # line too long (handled by formatter)
+]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401", "E402"]
+
+[tool.ruff.isort]
+known-first-party = ["src"]
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+show_error_codes = true
+pretty = true
+
+[[tool.mypy.overrides]]
+module = [
+    "loguru.*",
+    "pydantic.*",
+    "sqlmodel.*",
+    "alembic.*",
+]
+ignore_missing_imports = true
+
+[tool.coverage.run]
+branch = true
+source = ["src"]
+omit = ["tests/*", "**/tests/**"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+]

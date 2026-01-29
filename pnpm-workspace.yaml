@@ -1,0 +1,10 @@
+# pnpm workspace configuration for Phase II Todo App monorepo
+# Defines which directories contain workspace packages
+# See specs/002-todo-web-app/plan.md for monorepo structure details
+
+packages:
+  # Application packages
+  - 'apps/*'
+
+  # Shared packages
+  - 'packages/*'
